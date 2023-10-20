@@ -14,7 +14,6 @@ export class MainScene extends Phaser.Scene {
 
   constructor() {
     super("MainScene");
-    console.log("URL:", SERVER_URL);
   }
 
   // game loop methods
