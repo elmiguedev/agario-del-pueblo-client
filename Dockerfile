@@ -8,4 +8,4 @@ RUN pnpm install
 RUN pnpm build
 
 
-CMD ["pnpm","-g","daemon off;"]
+CMD ["pnpm","serve"]
