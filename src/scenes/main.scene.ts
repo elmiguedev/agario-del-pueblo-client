@@ -3,6 +3,7 @@ import { Player } from "../entities/player";
 import io, { Socket } from "socket.io-client"
 import { Dot } from "../entities/Dot";
 
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:4000";
 
 export class MainScene extends Phaser.Scene {
   private socket: Socket;
@@ -58,29 +59,30 @@ export class MainScene extends Phaser.Scene {
   }
 
   createCursor() {
-    this.input.on("pointermove", (event) => {
-      const position = {
-        x: event.worldX,
-        y: event.worldY
-      }
+    if (this.player)
+      this.input.on("pointermove", (event) => {
+        const position = {
+          x: event.worldX,
+          y: event.worldY
+        }
 
-      const distance = Phaser.Math.Distance.BetweenPoints(
-        this.player,
-        position,
-      )
+        const distance = Phaser.Math.Distance.BetweenPoints(
+          this.player,
+          position,
+        )
 
-      const angle = Phaser.Math.Angle.BetweenPoints(
-        this.player,
-        position,
-      );
+        const angle = Phaser.Math.Angle.BetweenPoints(
+          this.player,
+          position,
+        );
 
 
-      this.socket.emit("player:move", {
-        angle,
-        distance
-      });
+        this.socket.emit("player:move", {
+          angle,
+          distance
+        });
 
-    })
+      })
   }
 
   createDot(id: string, x: number, y: number, color: number) {
@@ -106,7 +108,7 @@ export class MainScene extends Phaser.Scene {
   createSocket() {
     this.enemies = new Map();
     this.dots = new Map();
-    this.socket = io("http://localhost:5000");
+    this.socket = io(SERVER_URL);
 
     // 1. si yo me conecto
     this.socket.on("connect", () => {
