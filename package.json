@@ -1,7 +1,8 @@
 {
   "name": "el-agario-del-pueblo-client",
   "scripts": {
-    "dev": "vite"
+    "dev": "vite",
+    "build": "tsc && vite build"
   },
   "devDependencies": {
     "@types/socket.io-client": "^3.0.0",
