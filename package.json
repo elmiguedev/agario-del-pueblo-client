@@ -2,10 +2,12 @@
   "name": "el-agario-del-pueblo-client",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build --base=./",
+    "serve": "http-server ./dist -p 8080"
   },
   "devDependencies": {
     "@types/socket.io-client": "^3.0.0",
+    "http-server": "^14.1.1",
     "typescript": "^5.2.2",
     "vite": "^4.4.9"
   },
