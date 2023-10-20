@@ -61,8 +61,9 @@ export class MainScene extends Phaser.Scene {
   }
 
   createCursor() {
-    if (this.player)
-      this.input.on("pointermove", (event) => {
+    this.input.on("pointermove", (event: any) => {
+      if (this.player) {
+
         const position = {
           x: event.worldX,
           y: event.worldY
@@ -83,8 +84,9 @@ export class MainScene extends Phaser.Scene {
           angle,
           distance
         });
+      }
 
-      })
+    })
   }
 
   createDot(id: string, x: number, y: number, color: number) {
@@ -167,7 +169,7 @@ export class MainScene extends Phaser.Scene {
       });
 
       // crea todos los dots
-      data.dots.forEach((dot) => {
+      data.dots.forEach((dot: any) => {
         this.createDot(dot.id, dot.x, dot.y, dot.color);
       })
     })

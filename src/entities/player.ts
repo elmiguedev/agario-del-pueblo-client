@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { INITIAL_RADIUS, MAX_SPEED } from "../utils/constants";
+import { MAX_SPEED } from "../utils/constants";
 
 export class Player extends Phaser.GameObjects.Arc {
 
