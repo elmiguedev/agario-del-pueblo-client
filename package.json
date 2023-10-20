@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build --base=./",
-    "serve": "http-server ./dist -p 8080"
+    "create:tar": "tar -cvf ./deploy.tar --exclude='*.map' ./captain-definition ./dist/*"
   },
   "devDependencies": {
     "@types/socket.io-client": "^3.0.0",
