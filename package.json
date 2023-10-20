@@ -1,0 +1,15 @@
+{
+  "name": "el-agario-del-pueblo-client",
+  "scripts": {
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "@types/socket.io-client": "^3.0.0",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9"
+  },
+  "dependencies": {
+    "phaser": "^3.60.0",
+    "socket.io-client": "^4.7.2"
+  }
+}
