@@ -1,4 +1,4 @@
-FROM smebberson/alpine-nginx-nodejs
+FROM catatnight/nginx-nodejs
 
 WORKDIR /app
 COPY . /app
