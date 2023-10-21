@@ -3,9 +3,10 @@ FROM node:18 as build
 WORKDIR /app
 COPY . /app
 
-RUN npm install -g pnpm
-RUN pnpm install
-RUN pnpm build
+RUN rm -rf node_modules
+# RUN npm install -g pnpm
+RUN npm install
+RUN npm run build
 
 FROM nginx
 COPY --from=build /app/dist /var/www/html/
