@@ -3,8 +3,6 @@ FROM node:18 AS builder
 
 WORKDIR /app
 
-ENV NODE_OPTIONS=--max-old-space-size=1536
-
 # Instalar pnpm globalmente
 RUN npm install -g pnpm
 
