@@ -1,14 +1,37 @@
-FROM node:lts-alpine as build-stage
-RUN mkdir -p /app
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+# Etapa de compilación
+FROM node:18 AS builder
 
-FROM nginx:stable-alpine as production-stage
-EXPOSE 8081
+WORKDIR /app
+
+ENV NODE_OPTIONS=--max-old-space-size=1536
+
+# Instalar pnpm globalmente
+RUN npm install -g pnpm
+
+# Copiar los archivos de la aplicación
+COPY package.json .
+COPY pnpm-lock.yaml .
+
+# Instalar las dependencias
+RUN pnpm install
+
+# Copiar el código fuente de la aplicación
+COPY . .
+
+# Compilar la aplicación
+RUN pnpm build
+
+# Etapa de producción
+FROM nginx:latest
+
+# Copiar los archivos compilados de la aplicación a NGINX
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Configurar el archivo de configuración de NGINX
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-RUN rm -rf /usr/share/nginx/html/*
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+# Exponer el puerto 80
+EXPOSE 80
+
+# Iniciar NGINX
 CMD ["nginx", "-g", "daemon off;"]
