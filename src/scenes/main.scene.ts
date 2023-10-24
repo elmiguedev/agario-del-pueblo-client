@@ -33,8 +33,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   update() {
-    if (this.player)
-      this.player.update();
+    this.updatePlayers();
   }
 
   // creation methods
@@ -249,6 +248,14 @@ export class MainScene extends Phaser.Scene {
     })
   }
 
+  updatePlayers() {
+    if (this.player)
+      this.player.update();
+
+    Object.values(this.enemies).forEach(enemy => {
+      enemy.update();
+    })
+  }
 
 
 }
