@@ -252,9 +252,10 @@ export class MainScene extends Phaser.Scene {
     if (this.player)
       this.player.update();
 
-    Object.values(this.enemies).forEach(enemy => {
-      enemy.update();
-    })
+    if (this.enemies)
+      Object.values(this.enemies).forEach(enemy => {
+        enemy && enemy.update(); // Comment
+      })
   }
 
 
