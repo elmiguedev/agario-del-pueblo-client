@@ -24,6 +24,7 @@ export class MainHud extends Scene {
       return b.radius - a.radius
     });
 
+    // Comment
     let infoText = "";
     array.forEach((player: any) => {
       infoText += `${player.name} - ${player.radius} \n`;
