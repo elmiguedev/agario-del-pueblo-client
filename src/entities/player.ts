@@ -3,14 +3,15 @@ import { MAX_SPEED } from "../utils/constants";
 
 export class Player extends Phaser.GameObjects.Arc {
 
-  private positionLabel: Phaser.GameObjects.Text
-
-  constructor(scene: Phaser.Scene, x: number, y: number, radius: number, color?: number) {
+  private nameLabel: Phaser.GameObjects.Text
+  private playerName: string;
+  constructor(scene: Phaser.Scene, x: number, y: number, name: string, radius: number, color?: number) {
     super(scene, x, y, radius);
+    this.playerName = name;
     this.setFillStyle(color || 0xff0000, 1);
     this.scene.add.existing(this);
     this.setDepth(20);
-    this.createPositionLabel();
+    this.createNameLabel();
   }
 
   public move(position: Phaser.Types.Math.Vector2Like) {
@@ -26,14 +27,14 @@ export class Player extends Phaser.GameObjects.Arc {
   }
 
   public update() {
-    this.updatePositionLabel();
+    this.updateNameLabel();
   }
 
-  private createPositionLabel() {
-    this.positionLabel = this.scene.add.text(
+  private createNameLabel() {
+    this.nameLabel = this.scene.add.text(
       this.x,
       this.y,
-      "",
+      this.playerName,
       {
         color: "black"
       }
@@ -42,11 +43,8 @@ export class Player extends Phaser.GameObjects.Arc {
       .setDepth(30);
   }
 
-  private updatePositionLabel() {
-    this.positionLabel.setText(
-      `x: ${Math.trunc(this.x)}, y: ${Math.trunc(this.y)}`
-    );
-    this.positionLabel.setPosition(this.x, this.y);
+  private updateNameLabel() {
+    this.nameLabel.setPosition(this.x, this.y);
   }
 
   public updateRadius(value: number) {

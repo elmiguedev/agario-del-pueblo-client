@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { Player } from "../entities/player";
 import io, { Socket } from "socket.io-client"
 import { Dot } from "../entities/Dot";
+import { MainHud } from "../huds/main.hud";
 
 // @ts-ignore
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:4000";
@@ -11,18 +12,24 @@ export class MainScene extends Phaser.Scene {
   private player: Player;
   private enemies: Map<string, Player>;
   private dots: Map<string, Dot>;
+  private playerName: string;
+  private hud: MainHud;
 
   constructor() {
     super("MainScene");
-    console.log(SERVER_URL)
   }
 
   // game loop methods
   // ---------------------
+  init(data: any) {
+    this.playerName = data.playerName;
+  }
+
   create() {
     this.createMap();
     this.createCursor();
     this.createSocket();
+    this.createHud();
   }
 
   update() {
@@ -46,12 +53,17 @@ export class MainScene extends Phaser.Scene {
       1,
       0xcccccc
     );
-    this.physics.world.setBounds(-1500, -1500, 3000, 3000);
-    this.physics.world.setBoundsCollision();
   }
 
-  createPlayer(x: number, y: number, radius: number, color?: number) {
-    this.player = new Player(this, x, y, radius, color);
+  createPlayer(x: number, y: number, name: string, radius: number, color?: number) {
+    this.player = new Player(
+      this,
+      x,
+      y,
+      name,
+      radius,
+      color
+    );
     this.createCamera();
   }
 
@@ -94,6 +106,11 @@ export class MainScene extends Phaser.Scene {
     this.dots.set(id, dot);
   }
 
+  createHud() {
+    this.scene.launch("MainHud")
+    this.hud = this.scene.get("MainHud") as MainHud;
+  }
+
   // behavior methods
   // ---------------------
 
@@ -112,7 +129,11 @@ export class MainScene extends Phaser.Scene {
   createSocket() {
     this.enemies = new Map();
     this.dots = new Map();
-    this.socket = io(SERVER_URL);
+    this.socket = io(SERVER_URL, {
+      query: {
+        playerName: this.playerName
+      }
+    });
 
     // 1. si yo me conecto
     this.socket.on("connect", () => {
@@ -131,12 +152,18 @@ export class MainScene extends Phaser.Scene {
           this,
           data.x,
           data.y,
+          data.name,
           data.radius,
           data.color
         ));
       }
       else {
-        this.createPlayer(data.x, data.y, data.radius, data.color);
+        this.createPlayer(
+          data.x,
+          data.y,
+          data.name,
+          data.radius,
+          data.color);
       }
     });
 
@@ -190,6 +217,9 @@ export class MainScene extends Phaser.Scene {
           }
         }
       })
+
+      // Actualiza el hud
+      this.hud.updatePlayerInfo(data.players);
     })
 
     // Si viene un player come un punto
